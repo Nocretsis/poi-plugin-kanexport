@@ -37,7 +37,7 @@ export const reactClass = connect(state => ({
         this.handleActivityAirbaseChange = this.handleActivityAirbaseChange.bind(this);
     }
 
-    state = { result: "", activityAirbaseOnly: true, curOutput: null, errorMsg: null, testlen:22900 };
+    state = { result: "", activityAirbaseOnly: true, curOutput: null, errorMsg: null};
 
     //艦娘資料輸出(包含未上鎖)
     //另3function程式碼大致相同
@@ -287,14 +287,6 @@ export const reactClass = connect(state => ({
         document.body.removeChild(content);
     }
 
-    test = () => {
-        const testlen = this.state.testlen + 1000
-        const url = 'https://noro6.github.io/kc-web/#import/' + ('1'.repeat(testlen))
-        this.setState({testlen})
-        console.log(url.length);
-        shell.openExternal(url)
-    }
-
     render() {
         const result = this.state.result;
         const errorMsg = this.state.errorMsg;
@@ -358,10 +350,6 @@ export const reactClass = connect(state => ({
 
                 <Button onClick={this.openJervis}>
                 作戦室Jervis
-                </Button>
-                
-                <Button onClick={this.test}>
-                    test
                 </Button>
                 </ButtonGroup>
                 

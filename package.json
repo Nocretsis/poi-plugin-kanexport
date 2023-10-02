@@ -1,6 +1,6 @@
 {
     "name": "poi-plugin-kanexport",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "main.js",
     "description": "a plugin export fleet to noro6 or jervis, also export ships and equips to noro6",
     "author": {
