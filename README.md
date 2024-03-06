@@ -7,6 +7,10 @@
 1. KyoMiko的fleet-export
 2. oooo1111880的noro6-export
 
+KyoMiko的fleet-export github 有輸出陸航的PR，但未有回應
+
+我這裏增強一下：W6 W7 的陸航也能輸出了
+
 方便個人使用
 
 > 注意：

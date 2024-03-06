@@ -3,7 +3,6 @@ import { Button, TextArea, ButtonGroup, Icon } from "@blueprintjs/core";
 import { connect } from 'react-redux'
 import { shell } from 'electron'
 
-
 export const windowMode = false;
 
 const parseShip = (ship) => {
@@ -37,7 +36,7 @@ export const reactClass = connect(state => ({
         this.handleActivityAirbaseChange = this.handleActivityAirbaseChange.bind(this);
     }
 
-    state = { result: "", activityAirbaseOnly: true, curOutput: null, errorMsg: null};
+    state = { result: "", selectAirbasesWorld: "event", activityAirbaseOnly: 'to-be-decreated', curOutput: null, errorMsg: null};
 
     //艦娘資料輸出(包含未上鎖)
     //另3function程式碼大致相同
@@ -194,10 +193,19 @@ export const reactClass = connect(state => ({
         }
         //遍历陆航中的航空中队
         let airbase_cnt = 0;
-        console.log(this.state.activityAirbaseOnly);
+        // console.log(`[kanexport] activityAirbaseOnly ${this.state.activityAirbaseOnly}`);
+        console.log(`[kanexport] selected airbases ${this.state.selectedAirbases}`);
+
         for (let i = 0; i < airbases.length; i++) {
             const airbase = airbases[i];
-            if (this.state.activityAirbaseOnly && airbase.api_area_id < 30) continue;
+            console.log(`[kanexport] airbase-${i + 1} on area ${airbase.api_area_id}`);
+            if (!this.state.selectedAirbases) continue;
+            if (this.state.selectedAirbases == 'event') 
+                if (airbase.api_area_id < 30)
+                    continue;
+            else if (this.state.selectedAirbases != airbase.api_area_id) 
+                continue;
+            console.log(`[kanexport] airbase-${i + 1} join`);
             airbase_cnt += 1;
             result += `"a${airbase_cnt}":{"items": {`;
             //遍历航空中队中的飞机
@@ -221,6 +229,7 @@ export const reactClass = connect(state => ({
             //加上航空中队的行动状态
             result += `"mode":${airbase.api_action_kind}},`
         }
+
         //去除最后的逗号并且补上json字符串的后括号
         if (result.charAt(result.length - 1) == ',') {
             result = result.slice(0, result.length - 1) + `}`
@@ -273,8 +282,9 @@ export const reactClass = connect(state => ({
     }
 
     handleActivityAirbaseChange = (event) => {
-        const value = event.target.checked;
-        this.setState({activityAirbaseOnly: value});
+        console.log(`[kanexport] handleActivityAirbaseChange "${event.target.value}"`);
+        const value = event.target.value;
+        this.setState({selectAirbasesWorld: value});
     }
 
     copyToClipboard = () => {
@@ -305,9 +315,12 @@ export const reactClass = connect(state => ({
                     <Button onClick={this.exportFleet}>
                         刷新艦隊、航空隊
                     </Button>
-                <label style={{ marginLeft: "10px" }}>
-                    <input type="checkbox" checked={this.state.activityAirbaseOnly} onChange={this.handleActivityAirbaseChange} />
-                    指定輸出限定海域基地航空隊
+                <label style={{ marginLeft: "10px" }}>指定海域基地航空隊：
+                <select name="airbases" onChange={this.handleActivityAirbaseChange}>
+                    <option value="">不輸出</option>
+                    <option value="6">中部海域(W6)</option>
+                    <option value="7" >南西海域(W7)</option>
+                    <option value="event" selected>活動限定海域</option></select>
                 </label>
 
                 <h4>艦娘、装備情報</h4>
